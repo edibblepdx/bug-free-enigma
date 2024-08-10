@@ -4,7 +4,7 @@ import librosa
 import matplotlib.pyplot as plt
 import io
 
-ALLOWED_EXTENSIONS = {'wav'}
+ALLOWED_EXTENSIONS = {'wav', 'mp3'}
 
 app = Flask(__name__)
 
