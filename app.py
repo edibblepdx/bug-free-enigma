@@ -18,6 +18,7 @@ class APIFileError(APIError):
     description = 'file error'
 
 def gen_spectrogram(file):
+    """Generate a Spectrogram Image"""
     # load the audio as a waveform y
     # store the sampling rate as sr
     target_sr = 22050
@@ -43,15 +44,18 @@ def gen_spectrogram(file):
     return img
 
 def allowed_file(filename):
+    """Validate file extension"""
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def index():
+    """homepage"""
     return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    """Uploaded file"""
     # check if the post request has the file part
     if 'file' not in request.files:
         raise APIFileError('No file part')
@@ -68,11 +72,6 @@ def upload():
         return send_file(spectrogram_img, mimetype='image/png', as_attachment=True, download_name='spectrogram.png')
     else:
         raise APIFileError('Invalid extension')
-
-    
-
-
-    
 
 @app.errorhandler(APIError)
 def handle_exception(err):
