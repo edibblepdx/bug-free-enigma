@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ML Audio Genre Classifier</title>
+    </head>
+    <style>
+        body {text-align: center;}
+    </style>
+</html>
+<body>
+    <br />
+    <form id="form">
+        <label for="file">Select WAV</label>
+        <input type="file" id="file" name="file" accept=".wav" />
+        <button type="submit">Classify</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('form').addEventListener('submit', function(event) {
+            const formData = new FormData();
+            const fileInput = document.getElementById('file');
+            formData.append('file', fileInput.files[0]);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error('Error uploading file');
+                }
+            })
+            .then(blob => {
+                const imgURL = URL.createObjectURL(blob);
+                const img = document.createElement('img');
+                img.src = imgURL;
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = ''; // Clear previous results
+                resultDiv.appendChild(img);
+            })
+            .catch(err => console.error('Error:', err));
+            event.preventDefault();
+        })
+    </script>
+</body>
