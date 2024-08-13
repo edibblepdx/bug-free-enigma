@@ -1,3 +1,6 @@
+# Ethan Dibble
+# CNN for audio feature extraction
+
 import numpy as np
 import pandas as pd
 import librosa
@@ -70,8 +73,6 @@ def preprocess_labels(labels):
     labels_onehot = to_categorical(labels_encoded) # returns an array of one-hot encoded vector labels
 
     return labels_onehot, label_encoder
-
-def calc_apr():
 
 def main():
     """example use"""
