@@ -89,16 +89,25 @@ def main():
     x_train, x_test, y_train, y_test = train_test_split(extracted_features, labels_onehot, test_size=0.2, random_state=42, stratify=labels_onehot)
 
     # create model
+    """
     dnn_model = Sequential([
-        Dense(512, activation='relu')
+        Dense(512, activation='relu', input_shape=(x_train.shape[1],))
         , Dropout(0.5)
         , Dense(len(label_encoder.classes_), activation='softmax')
+    ])
+    """
+    dnn_model = Sequential([
+        Dense(256, activation='relu', input_shape=(x_train.shape[1],))
+        , Dense(128, activation='relu')
+        , Dense(64, activation='relu')
+        , Dense(10, activation='softmax')
     ])
     # https://keras.io/api/optimizers/
     dnn_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # training
-    history = dnn_model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test), verbose=1)
+    # history = dnn_model.fit(x_train, y_train, epochs=20, validation_data=(x_test, y_test), verbose=1)
+    history = dnn_model.fit(x_train, y_train, epochs=20, batch_size=128)
     print(history.history)
 
     # predictions
@@ -117,7 +126,7 @@ def main():
     plt.show()
 
     # accuracy
-    accuracy = len(np.where(predicted_classes == true_classes)) / len(true_classes)
+    accuracy = np.sum(predicted_classes == true_classes) / len(true_classes)
     print (f"accuracy: {accuracy}")
 
 if __name__ == '__main__':
