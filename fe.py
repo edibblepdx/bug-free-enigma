@@ -71,6 +71,8 @@ def preprocess_labels(labels):
 
     return labels_onehot, label_encoder
 
+def calc_apr():
+
 def main():
     """example use"""
     features, labels = load_data('GTZAN/Data/genres_original', 'GTZAN/Data/features_30_sec.csv')
@@ -79,33 +81,43 @@ def main():
 
     extracted_features = cnn_model.predict(features)
 
-    # example with a dense neural network classifier
+    # what follows is a training example with a dense neural network
+
+    # one-hot labels and splitting sets
+    labels_onehot, label_encoder = preprocess_labels(labels)
+    x_train, x_test, y_train, y_test = train_test_split(extracted_features, labels_onehot, test_size=0.2, random_state=42, stratify=labels_onehot)
+
+    # create model
     dnn_model = Sequential([
         Dense(512, activation='relu')
         , Dropout(0.5)
-        , Dense(len(le.classes_), activation='softmax')
+        , Dense(len(label_encoder.classes_), activation='softmax')
     ])
     # https://keras.io/api/optimizers/
     dnn_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-    labels_onehot, label_encoder = preprocess_labels(labels)
-    x_train, x_test, y_train, y_test = train_test_split(extracted_features, labels_onehot, test_size=0.2, random_state=42, stratify=labels_onehot)
-
+    # training
     history = dnn_model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test), verbose=1)
     print(history.history)
 
+    # predictions
     predictions = dnn_model.predict(x_test) # shape(num_inputs, num_classes)
-    predicted_class_index = np.argmax(predictions, axis=1)
-    predicted_labels = label_encoder.inverse_transform(predicted_class_index)[0]
+    predicted_classes = np.argmax(predictions, axis=1) # largest indices
+    predicted_labels = label_encoder.inverse_transform(predicted_classes)
     true_classes = np.argmax(y_test, axis=1)
-    true_labels = label_encoder.inverse_transform(true_classes)[0]
+    true_labels = label_encoder.inverse_transform(true_classes)
 
     # confusion matrix
     cm = confusion_matrix(true_labels, predicted_labels, labels=label_encoder.classes_)
-
     display = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=label_encoder.classes_)
-    display.plot()
+    display.plot(cmap=plt.cm.Blues)
+    plt.xticks(rotation=45)
+    plt.title('Confusion Matrix DNN')
     plt.show()
+
+    # accuracy
+    accuracy = len(np.where(predicted_classes == true_classes)) / len(true_classes)
+    print (f"accuracy: {accuracy}")
 
 if __name__ == '__main__':
     main()
