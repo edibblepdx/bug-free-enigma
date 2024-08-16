@@ -18,7 +18,7 @@ To save and load the model after training
 fe.load_model(path)
 fe.save_model(path=None, overwrite=False)
 ```
-Example use
+Example use with SVM
 ```python
 fe = FeatureExtract()
 fe.load_model('cnn5.keras')
