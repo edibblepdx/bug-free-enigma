@@ -9,8 +9,9 @@ import numpy as np
 
 def main():
     fe = FeatureExtract()
-    fe.load('cnn3.keras')
-    x, y = fe.load_data('Data/genres_original', 'Data/features_30_sec.csv')
+    fe.load('cnn4.keras')
+    #x, y = fe.load_data('Data/genres_original', 'Data/features_30_sec.csv')
+    x, y = fe.load_csv('features.csv')
 
     #print(fe.model.summary)
     #print(fe.feature_extractor.summary)
@@ -46,7 +47,7 @@ def main():
     display = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=label_encoder.classes_)
     display.plot(cmap=plt.cm.Blues)
     plt.xticks(rotation=45)
-    plt.title('Confusion Matrix DNN')
+    plt.title('Confusion Matrix')
     plt.show()
 
     # accuracy

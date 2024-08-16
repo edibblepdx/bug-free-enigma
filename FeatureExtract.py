@@ -15,6 +15,7 @@ from keras.saving import load_model
 from keras import Model
 import matplotlib.pyplot as plt
 import argparse
+import csv
 import sys
 import os
 
@@ -60,13 +61,51 @@ class FeatureExtract:
 
         return np.array(features), np.array(labels)
 
+    def save_csv(self, path, features, labels):
+        """write features to csv"""
+        try:
+            header = [f"mfcc{i}" for i in range(N_MFCC)]
+            header.append("label")
+
+            with open('features.csv', 'w', encoding='UTF8') as f:
+                writer = csv.writer(f)
+                writer.writerow(header)
+
+                for feature, label in zip(features, labels):
+                    data = [a for a in feature]
+                    data.append(label)
+                    writer.writerow(data)
+
+        except Exception as e:
+            sys.stderr.write(f"Error writing to {path}: {e}\n")
+
+    def load_csv(self, path):
+        """load features from csv"""
+        try:
+            features = []
+            labels = []
+
+            data_features = pd.read_csv(path)
+            feature_columns = data_features.columns[:-1]
+            label_column = data_features.columns[-1]
+
+            for _, row in data_features.iterrows():
+                mfccs = row[feature_columns].values
+                features.append(mfccs)
+                labels.append(row[label_column])
+
+        except Exception as e:
+            sys.stderr.write(f"Error reading from {path}: {e}\n")
+
+        return np.array(features), np.array(labels)
+
     def train(self, features, labels, predict=False):
         """train the cnn"""
         labels_onehot, label_encoder = self.__preprocess_labels(labels)
         self.model = self.__build_cnn(features, len(label_encoder.classes_))
         x_train, x_test, y_train, y_test = train_test_split(features, labels_onehot, test_size=0.2, random_state=42, stratify=labels_onehot)
 
-        self.model.fit(x_train, y_train, epochs=20, validation_data=(x_test, y_test), verbose=1)
+        self.model.fit(x_train, y_train, epochs=50, validation_data=(x_test, y_test), verbose=1)
         self.feature_extractor = Model(
             inputs=self.model.inputs,
             outputs=self.model.get_layer(name="stop").output,
@@ -75,9 +114,6 @@ class FeatureExtract:
 
         if predict:
             self.__predict(x_test, y_test, label_encoder)
-
-        #self.model.pop()
-        #self.model.pop()
 
     def extract(self, input):
         """extract features from input"""
@@ -126,7 +162,7 @@ class FeatureExtract:
             display = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=label_encoder.classes_)
             display.plot(cmap=plt.cm.Blues)
             plt.xticks(rotation=45)
-            plt.title('Confusion Matrix DNN')
+            plt.title('Confusion Matrix')
             plt.show()
 
             # accuracy
@@ -158,15 +194,22 @@ class FeatureExtract:
             #, Dense(512, activation='relu')
             #, Dropout(0.5)
             #, Dense(num_classes, activation='softmax')
-            Conv1D(32, 3, padding='same', activation='relu', input_shape=(features.shape[1], 1))
-            , Conv1D(32, 3, padding='same', activation='relu')
+            Conv1D(64, 3, padding='same', activation='relu', input_shape=(features.shape[1], 1))
             , MaxPooling1D(pool_size=2)
-            , Conv1D(32, 3, padding='same', activation='relu')
-            , Conv1D(32, 3, padding='same', activation='relu')
+            , Dropout(0.1)
+            , Conv1D(128, 3, padding='same', activation='relu')
+            , MaxPooling1D(pool_size=2)
+            , Dropout(0.1)
+            , Conv1D(256, 3, padding='same', activation='relu')
+            , MaxPooling1D(pool_size=2)
+            , Dropout(0.1)
+            , Conv1D(512, 3, padding='same', activation='relu')
             , MaxPooling1D(pool_size=2, name='stop')
+            , Dropout(0.1)
             , Flatten()
-            , Dense(64, activation='relu')
-            , Dropout(0.5)
+            , Dense(2048, activation='relu')
+            , Dense(1024, activation='relu')
+            , Dense(256, activation='relu')
             , Dense(num_classes, activation='softmax')
         ])
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -178,8 +221,9 @@ def main():
     """example use"""
     fe = FeatureExtract()
     features, labels = fe.load_data('Data/genres_original', 'Data/features_30_sec.csv')
+    fe.save_csv('features.csv', features, labels)
     fe.train(features, labels, predict=True)
-    fe.save(path='cnn3.keras', overwrite=True)
+    fe.save(path='cnn4.keras', overwrite=True)
 
 if __name__ == '__main__':
     """
