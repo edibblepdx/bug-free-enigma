@@ -6,6 +6,7 @@ Starting out
 fe = FeatureExtract()
 x, y = fe.load_data('path/to/gtzan_wavs', 'path/to/gtzan_csv')
 fe.train(features=x, labels=y, predict=False)
+features = fe.extract(x)
 ```
 Subsequent importing of the data can be made quicker with
 ```python
