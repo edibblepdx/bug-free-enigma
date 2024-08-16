@@ -12,7 +12,7 @@ import numpy as np
 
 def main():
     fe = FeatureExtract()
-    fe.load('cnn5.keras')
+    fe.load_model('cnn5.keras')
     #x, y = fe.load_data('Data/genres_original', 'Data/features_30_sec.csv')
     x, y = fe.load_csv('features.csv')
 

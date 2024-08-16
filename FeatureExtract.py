@@ -126,7 +126,7 @@ class FeatureExtract:
             sys.stderr.write(f"Error extracting features: {e}\n")
             sys.stderr.write("train or load the model first\n")
 
-    def save(self, path=None, overwrite=False):
+    def save_model(self, path=None, overwrite=False):
         """save the cnn"""
         if path:
             self.model.save(path, overwrite=overwrite)
@@ -134,7 +134,7 @@ class FeatureExtract:
         else:
             self.model.save("./cnn.keras", overwrite=overwrite)
 
-    def load(self, path):
+    def load_model(self, path):
         """load the cnn"""
         try:
             self.model = load_model(path)
@@ -223,7 +223,7 @@ def main():
     features, labels = fe.load_data('Data/genres_original', 'Data/features_30_sec.csv')
     fe.save_csv('features.csv', features, labels)
     fe.train(features, labels, predict=True)
-    fe.save(path='cnn5.keras', overwrite=True)
+    fe.save_model(path='cnn5.keras', overwrite=True)
 
 if __name__ == '__main__':
     """
