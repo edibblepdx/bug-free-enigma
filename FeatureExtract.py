@@ -204,12 +204,12 @@ class FeatureExtract:
             , MaxPooling1D(pool_size=2)
             , Dropout(0.1)
             , Conv1D(512, 3, padding='same', activation='relu')
-            , MaxPooling1D(pool_size=2, name='stop')
+            , MaxPooling1D(pool_size=2)
             , Dropout(0.1)
             , Flatten()
             , Dense(2048, activation='relu')
             , Dense(1024, activation='relu')
-            , Dense(256, activation='relu')
+            , Dense(256, activation='relu', name='stop')
             , Dense(num_classes, activation='softmax')
         ])
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -223,7 +223,7 @@ def main():
     features, labels = fe.load_data('Data/genres_original', 'Data/features_30_sec.csv')
     fe.save_csv('features.csv', features, labels)
     fe.train(features, labels, predict=True)
-    fe.save(path='cnn4.keras', overwrite=True)
+    fe.save(path='cnn5.keras', overwrite=True)
 
 if __name__ == '__main__':
     """

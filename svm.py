@@ -12,7 +12,7 @@ import numpy as np
 
 def main():
     fe = FeatureExtract()
-    fe.load('cnn4.keras')
+    fe.load('cnn5.keras')
     #x, y = fe.load_data('Data/genres_original', 'Data/features_30_sec.csv')
     x, y = fe.load_csv('features.csv')
 
@@ -22,7 +22,7 @@ def main():
     features = fe.extract(x).numpy()
     print(type(features))
     print(features.shape)
-    features = features.reshape(999,-1)
+    #features = features.reshape(999,-1)
     print(features.shape)
 
     label_encoder = LabelEncoder()
