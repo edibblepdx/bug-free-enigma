@@ -3,6 +3,8 @@ import numpy as np
 import librosa
 import matplotlib.pyplot as plt
 import io
+from FeatureExtract import FeatureExtract
+from svm import SVM
 
 ALLOWED_EXTENSIONS = {'wav', 'mp3'}
 
