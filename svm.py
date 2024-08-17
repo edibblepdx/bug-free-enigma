@@ -9,37 +9,63 @@ from sklearn import svm
 from keras.utils import to_categorical
 import matplotlib.pyplot as plt
 import numpy as np
+import pickle
+
+class SVM:
+    def __init__(self):
+        self.clf = svm.SVC()
+
+    def fit(self, x_train, y_train):
+        """train SVM"""
+        self.clf.fit(x_train, y_train)
+
+    def predict(self, x_test):
+        """predict"""
+        predictions = self.clf.predict(x_test)
+        return predictions
+
+    def save_model(self):
+        """save model"""
+        with open('svm.pkl', 'wb') as f:
+            pickle.dump(self.clf, f)
+
+    def load_model(self):
+        """load model"""
+        with open('svm.pkl', 'rb') as f:
+            clf = pickle.load(f)
 
 def main():
     fe = FeatureExtract()
-    fe.load_model('cnn5.keras')
+    fe.load_model('cnn6.keras')
     #x, y = fe.load_data('Data/genres_original', 'Data/features_30_sec.csv')
     x, y = fe.load_csv('features.csv')
 
-    #print(fe.model.summary)
-    #print(fe.feature_extractor.summary)
-
+    # extract features using CNN
     features = fe.extract(x).numpy()
     print(type(features))
     print(features.shape)
-    #features = features.reshape(999,-1)
     print(features.shape)
 
     label_encoder = LabelEncoder()
     labels_encoded = label_encoder.fit_transform(y)
-    #labels_onehot = to_categorical(labels_encoded)
 
+    # train test split
     x_train, x_test, y_train, y_test = train_test_split(features, labels_encoded, test_size=0.2, random_state=42, stratify=labels_encoded)
 
+    """
+    # train SVM
     clf = svm.SVC()
     clf.fit(x_train, y_train)
     predictions = clf.predict(x_test)
+    """
 
-    #predicted_classes = np.argmax(predictions, axis=1) # largest indices
-    #predicted_labels = label_encoder.inverse_transform(predicted_classes)
-    #true_classes = np.argmax(y_test, axis=1)
-    #true_labels = label_encoder.inverse_transform(true_classes)
+    # train SVM
+    model = SVM()
+    model.fit(x_train, y_train)
+    predictions = model.predict(x_test)
+    model.save_model()
 
+    # labels encoded and classes
     print(np.unique(y_test))
     print(label_encoder.classes_)
 
