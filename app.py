@@ -10,6 +10,8 @@ import io
 
 ALLOWED_EXTENSIONS = {'wav', 'mp3'}
 LABELS = ['blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop','reggae', 'rock']
+CNN_MODEL = './models/cnn6.keras'
+SVM_MODEL = './models/svm6.pkl'
 
 app = Flask(__name__)
 
@@ -60,7 +62,7 @@ def preprocess(y):
 def extract_features(mfccs_scaled):
     """extract the features from the audio file"""
     fe = FeatureExtract()
-    fe.load_model('cnn6.keras')
+    fe.load_model(CNN_MODEL)
     print(mfccs_scaled.shape)
     features = fe.extract(mfccs_scaled).numpy()
 
@@ -72,7 +74,7 @@ def extract_features(mfccs_scaled):
 def predict(features):
     """attempt to classify the audio file""" 
     model = SVM()
-    model.load_model('svm_sample.pkl')
+    model.load_model(SVM_MODEL)
     prediction = model.predict(features)
 
     label_encoder = LabelEncoder()
