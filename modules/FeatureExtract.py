@@ -14,7 +14,6 @@ from keras.layers import Conv1D, Dropout, Flatten, MaxPooling1D, Dense
 from keras.saving import load_model
 from keras import Model
 import matplotlib.pyplot as plt
-import argparse
 import csv
 import sys
 import os
@@ -216,7 +215,6 @@ class FeatureExtract:
 
         return model
 
-#def main(inputs, labels, output, save):
 def main():
     """example use"""
     fe = FeatureExtract()
@@ -226,16 +224,4 @@ def main():
     fe.save_model(path='cnn6.keras', overwrite=True)
 
 if __name__ == '__main__':
-    """
-    parser = argparse.ArgumentParser(
-        prog='FeatureExtract.py'
-        , description='Creates, Saves, Loads a CNN as a feature extractor for input to other models.'
-    )
-    parser.add_argument('-i', '--inputs', required=True, help='inputs path')
-    parser.add_argument('-l', '--labels', required=True, help='labels path')
-    parser.add_argument('-o', '--output', help='output name, default="cnn.keras"')
-    parser.add_argument('-s', '--save', help='save model')
-    args = parser.parse_args()
-    main(args.inputs, args.labels, args.output, args.save)
-    """
     main()
