@@ -24,15 +24,15 @@ class SVM:
         predictions = self.clf.predict(x_test)
         return predictions
 
-    def save_model(self):
+    def save_model(self, file_path):
         """save model"""
-        with open('svm.pkl', 'wb') as f:
+        with open(file_path, 'wb') as f:
             pickle.dump(self.clf, f)
 
-    def load_model(self):
+    def load_model(self, file_path):
         """load model"""
-        with open('svm.pkl', 'rb') as f:
-            clf = pickle.load(f)
+        with open(file_path, 'rb') as f:
+            self.clf = pickle.load(f)
 
 def main():
     fe = FeatureExtract()
@@ -43,7 +43,6 @@ def main():
     # extract features using CNN
     features = fe.extract(x).numpy()
     print(type(features))
-    print(features.shape)
     print(features.shape)
 
     label_encoder = LabelEncoder()
@@ -63,7 +62,17 @@ def main():
     model = SVM()
     model.fit(x_train, y_train)
     predictions = model.predict(x_test)
-    model.save_model()
+    model.save_model('svm.pkl')
+
+    clf2 = svm.SVC()
+    with open('svm.pkl', 'rb') as f:
+        clf2 = pickle.load(f)
+
+    print(label_encoder.inverse_transform(model.predict(x_test[1].reshape(1, -1))))
+    print(label_encoder.inverse_transform(clf2.predict(x_test[1].reshape(1, -1))))
+
+    # print(np.shape(x_test[1].reshape(1, -1)))
+    # print(x_test[1].reshape(1, -1))
 
     # labels encoded and classes
     print(np.unique(y_test))

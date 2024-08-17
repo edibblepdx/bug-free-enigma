@@ -15,7 +15,12 @@
         <input type="file" id="file" name="file" accept=".wav, .mp3" />
         <button type="submit">Classify</button>
     </form>
-    <div id="result"></div>
+    <!--<div id="result"></div>-->
+    <br />
+    <div id="result">
+        <h1 id="prediction"></h1>
+        <div id="spectrogram"></div>
+    </div>
 
     <script>
         document.getElementById('form').addEventListener('submit', function(event) {
@@ -29,11 +34,13 @@
             })
             .then(response => {
                 if (response.ok) {
-                    return response.blob();
+                    //return response.blob();
+                    return response.json();
                 } else {
                     throw new Error('Error uploading file');
                 }
             })
+            /*
             .then(blob => {
                 const imgURL = URL.createObjectURL(blob);
                 const img = document.createElement('img');
@@ -41,6 +48,20 @@
                 const resultDiv = document.getElementById('result');
                 resultDiv.innerHTML = ''; // Clear previous results
                 resultDiv.appendChild(img);
+            })
+            */
+            .then(data => {
+                // Display prediction
+                const predictionDiv = document.getElementById('prediction');
+                predictionDiv.innerHTML = `<p>Prediction: ${data.prediction}</p>`;
+                
+                // Display spectrogram image
+                const spectrogramDiv = document.getElementById('spectrogram');
+                spectrogramDiv.innerHTML = ''; // Clear previous results
+                const img = document.createElement('img');
+                img.src = `data:image/png;base64,${data.spectrogram}`;
+                img.onerror = () => console.error('Image failed to load');
+                spectrogramDiv.appendChild(img);
             })
             .catch(err => console.error('Error:', err));
             event.preventDefault();

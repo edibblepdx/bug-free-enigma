@@ -119,7 +119,7 @@ class FeatureExtract:
         """extract features from input"""
         try:
             # https://keras.io/guides/sequential_model/#feature-extraction-with-a-sequential-model
-            # print(type(self.feature_extractor(input)))
+            #print("Inputs shape:", np.shape(input))  # Debugging line
             return self.feature_extractor(input)
 
         except Exception as e:
