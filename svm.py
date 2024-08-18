@@ -64,19 +64,9 @@ def main():
     predictions = model.predict(x_test)
     model.save_model('svm.pkl')
 
-    clf2 = svm.SVC()
-    with open('svm.pkl', 'rb') as f:
-        clf2 = pickle.load(f)
-
-    print(label_encoder.inverse_transform(model.predict(x_test[1].reshape(1, -1))))
-    print(label_encoder.inverse_transform(clf2.predict(x_test[1].reshape(1, -1))))
-
-    # print(np.shape(x_test[1].reshape(1, -1)))
-    # print(x_test[1].reshape(1, -1))
-
     # labels encoded and classes
-    print(np.unique(y_test))
-    print(label_encoder.classes_)
+    # print(np.unique(y_test))
+    # print(label_encoder.classes_)
 
     # confusion matrix
     predicted_labels = label_encoder.inverse_transform(predictions)
