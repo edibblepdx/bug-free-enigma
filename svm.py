@@ -6,18 +6,17 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn import svm
-from keras.utils import to_categorical
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 
 class SVM:
     def __init__(self):
-        self.clf = svm.SVC(kernel='sigmoid')
+        self.clf = svm.SVC(kernel='rbf')
 
     def fit(self, x_train, y_train):
         """train SVM"""
-        self.clf.fit(x_train, y_train)
+        history = self.clf.fit(x_train, y_train)
 
     def predict(self, x_test):
         """predict"""
@@ -51,12 +50,10 @@ def main():
     # train test split
     x_train, x_test, y_train, y_test = train_test_split(features, labels_encoded, test_size=0.2, random_state=42, stratify=labels_encoded)
 
-    """
     # train SVM
-    clf = svm.SVC()
-    clf.fit(x_train, y_train)
-    predictions = clf.predict(x_test)
-    """
+    # clf = svm.SVC()
+    # clf.fit(x_train, y_train)
+    # predictions = clf.predict(x_test)
 
     # train SVM
     model = SVM()
@@ -81,7 +78,6 @@ def main():
     # accuracy
     accuracy = np.sum(predictions == y_test) / len(y_test)
     print (f"accuracy: {accuracy}")
- 
 
 if __name__ == '__main__':
     main()
