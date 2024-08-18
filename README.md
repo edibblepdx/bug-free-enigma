@@ -11,12 +11,12 @@ fe.train(features=x, labels=y, predict=False)
 features = fe.extract(x) # returns a tf.Tensor
 features = features.numpy() # to get a numpy array
 ```
-Subsequent importing of the mfcc values can be made quicker with (these are not the values axtractedfrom the cnn)
+Subsequent importing of the mfcc values can be made quicker with (these are not the values axtractedfrom the CNN)
 ```python
 fe.save_csv('features.csv', features, labels)
 x, y = fe.load_csv('features.csv')
 ```
-To save and load the cnn model after training
+To save and load the CNN model after training
 ```python
 fe.load_model(path)
 fe.save_model(path=None, overwrite=False)
