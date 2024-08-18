@@ -1,9 +1,9 @@
 app.py contains a flask app that when run in the browser will return a spectrogram image and genre prediction.
 
+Starting out with using the feature extractor
 ```python
 from FeatureExtract import FeatureExtract
 ```
-Starting out
 ```python
 fe = FeatureExtract()
 x, y = fe.load_data('path/to/gtzan_wavs', 'path/to/gtzan_csv')
