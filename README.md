@@ -1,3 +1,5 @@
+app.py contains a flask app that when run in the browser will return a spectrogram image and genre prediction.
+
 ```python
 from FeatureExtract import FeatureExtract
 ```
