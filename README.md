@@ -16,7 +16,7 @@ Subsequent importing of the mfcc values can be made quicker with (these are not 
 fe.save_csv('features.csv', features, labels)
 x, y = fe.load_csv('features.csv')
 ```
-To save and load the model after training
+To save and load the cnn model after training
 ```python
 fe.load_model(path)
 fe.save_model(path=None, overwrite=False)
