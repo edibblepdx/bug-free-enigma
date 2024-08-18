@@ -60,7 +60,7 @@ accuracy = np.sum(predicted_classes == true_classes) / len(true_classes)
 print (f"accuracy: {accuracy}")
 
 # Plot training accuracy and loss over epochs
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(6, 6))
 
 plt.plot(history.history['accuracy'], label='Accuracy')
 plt.plot(history.history['loss'], label='Loss')
