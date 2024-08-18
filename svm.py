@@ -13,7 +13,7 @@ import pickle
 
 class SVM:
     def __init__(self):
-        self.clf = svm.SVC()
+        self.clf = svm.SVC(kernel='sigmoid')
 
     def fit(self, x_train, y_train):
         """train SVM"""
