@@ -8,7 +8,7 @@ import numpy as np
 
 fe = FeatureExtract()
 fe.load_model('cnn6.keras')
-x, y = fe.load_csv('features.csv')
+x, y = fe.load_csv('mfccs.csv')
 
 # extract features using CNN
 features = fe.extract(x).numpy()
