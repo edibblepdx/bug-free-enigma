@@ -1,7 +1,9 @@
+app.py contains a flask app that when run in the browser will return a spectrogram image and genre prediction.
+
+Starting out with using the feature extractor
 ```python
 from FeatureExtract import FeatureExtract
 ```
-Starting out
 ```python
 fe = FeatureExtract()
 x, y = fe.load_data('path/to/gtzan_wavs', 'path/to/gtzan_csv')
@@ -9,12 +11,12 @@ fe.train(features=x, labels=y, predict=False)
 features = fe.extract(x) # returns a tf.Tensor
 features = features.numpy() # to get a numpy array
 ```
-Subsequent importing of the data can be made quicker with
+Subsequent importing of the mfcc values can be made quicker with (these are not the values axtractedfrom the CNN)
 ```python
-fe.save_csv('features.csv', features, labels)
-x, y = fe.load_csv('features.csv')
+fe.save_csv('mfccs.csv', features, labels)
+x, y = fe.load_csv('mfccs.csv')
 ```
-To save and load the model after training
+To save and load the CNN model after training
 ```python
 fe.load_model(path)
 fe.save_model(path=None, overwrite=False)
