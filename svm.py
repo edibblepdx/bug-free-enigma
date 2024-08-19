@@ -37,7 +37,7 @@ def main():
     fe = FeatureExtract()
     fe.load_model('cnn6.keras')
     #x, y = fe.load_data('Data/genres_original', 'Data/features_30_sec.csv')
-    x, y = fe.load_csv('features.csv')
+    x, y = fe.load_csv('mfccs.csv')
 
     # extract features using CNN
     features = fe.extract(x).numpy()
@@ -51,19 +51,10 @@ def main():
     x_train, x_test, y_train, y_test = train_test_split(features, labels_encoded, test_size=0.2, random_state=42, stratify=labels_encoded)
 
     # train SVM
-    # clf = svm.SVC()
-    # clf.fit(x_train, y_train)
-    # predictions = clf.predict(x_test)
-
-    # train SVM
     model = SVM()
     model.fit(x_train, y_train)
     predictions = model.predict(x_test)
     model.save_model('svm.pkl')
-
-    # labels encoded and classes
-    # print(np.unique(y_test))
-    # print(label_encoder.classes_)
 
     # confusion matrix
     predicted_labels = label_encoder.inverse_transform(predictions)

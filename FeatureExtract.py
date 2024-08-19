@@ -219,9 +219,9 @@ def main():
     """example use"""
     fe = FeatureExtract()
     features, labels = fe.load_data('Data/genres_original', 'Data/features_30_sec.csv')
-    fe.save_csv('features.csv', features, labels)
+    fe.save_csv('mfccs.csv', features, labels)
     fe.train(features, labels, predict=True)
-    fe.save_model(path='cnn7.keras', overwrite=True)
+    fe.save_model(path='cnn.keras', overwrite=True)
 
 if __name__ == '__main__':
     main()
