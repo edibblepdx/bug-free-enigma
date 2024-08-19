@@ -183,16 +183,6 @@ class FeatureExtract:
         """Create a cnn model for feature extraction with input, convolutional, pooling layers"""
         input_shape = (features.shape[1], 1)
         model = Sequential([
-            #Conv1D(64, 3, padding='same', activation='relu', input_shape=input_shape)
-            #, MaxPooling1D(pool_size=2)
-            #, Dropout(0.25)
-            #, Conv1D(128, 3, padding='same', activation='relu')
-            #, MaxPooling1D(pool_size=2)
-            #, Dropout(0.25)
-            #, Flatten()
-            #, Dense(512, activation='relu')
-            #, Dropout(0.5)
-            #, Dense(num_classes, activation='softmax')
             Conv1D(64, 3, padding='same', activation='relu', input_shape=(features.shape[1], 1))
             , MaxPooling1D(pool_size=2)
             , Dropout(0.1)
